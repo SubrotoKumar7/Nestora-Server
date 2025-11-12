@@ -42,7 +42,12 @@ async function run(){
 
         // property related api
         app.get('/properties', async(req, res)=> {
-            const cursor = propertiesCollections.find({});
+            const email = req.query.email;
+            const query = {};
+            if(email){
+                query.agentEmail = email;
+            }
+            const cursor = propertiesCollections.find(query);
             const result = await cursor.toArray();
             res.send(result);
         })
