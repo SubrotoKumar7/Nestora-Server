@@ -53,6 +53,13 @@ async function run(){
             res.send(result)
         })
 
+        app.get('/latest-properties', async(req, res)=> {
+            const query = {};
+            const cursor =  propertiesCollections.find(query).sort({createdAt: -1}).limit(6);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
         await client.db('admin').command({ping: 1});
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
