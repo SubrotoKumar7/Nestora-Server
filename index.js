@@ -83,7 +83,6 @@ async function run(){
             const id = req.params.id;
             const updateProperties = req.body;
             delete updateProperties._id;
-            console.log(updateProperties);
             const query = {_id: new ObjectId(id)};
             const update = {
                 $set: updateProperties
