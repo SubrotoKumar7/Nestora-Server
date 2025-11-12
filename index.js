@@ -67,9 +67,20 @@ async function run(){
 
         app.delete('/properties/:id', async(req, res)=> {
             const id = req.params.id;
-            console.log(id);
             const query = {_id: new ObjectId(id)};
             const result = await propertiesCollections.deleteOne(query);
+            res.send(result);
+        })
+
+        app.patch('/properties/:id', async(req, res)=> {
+            const id = req.params.id;
+            const updateProperties = req.body;
+            const query = {_id: new ObjectId(id)};
+            const update = {
+                $set: updateProperties
+            }
+            const options = {};
+            const result = await propertiesCollections.updateOne(query, update, options);
             res.send(result);
         })
 
