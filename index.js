@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -63,6 +63,14 @@ async function run(){
             const cursor =  propertiesCollections.find(query).sort({createdAt: -1}).limit(6);
             const result = await cursor.toArray();
             res.send(result)
+        })
+
+        app.delete('/properties/:id', async(req, res)=> {
+            const id = req.params.id;
+            console.log(id);
+            const query = {_id: new ObjectId(id)};
+            const result = await propertiesCollections.deleteOne(query);
+            res.send(result);
         })
 
         await client.db('admin').command({ping: 1});
