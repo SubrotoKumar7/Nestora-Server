@@ -27,11 +27,12 @@ const client = new MongoClient(uri, {
 
 async function run(){
     try{
-        await client.connect();
+        // await client.connect();
 
         const database = client.db('nestora_db');
         const usersCollections = database.collection('users');
         const propertiesCollections = database.collection('properties');
+        const reviewsCollections = database.collection('reviews');
 
         // user related api
         app.post('/users', async(req, res)=> {
@@ -92,7 +93,16 @@ async function run(){
             res.send(result);
         })
 
-        await client.db('admin').command({ping: 1});
+        // reviews related api
+        app.post('/reviews', async(req, res)=> {
+            const data = req.body;
+            const result = await reviewsCollections.insertOne(data);
+            res.send(result);
+        })
+
+
+
+        // await client.db('admin').command({ping: 1});
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
     finally{
