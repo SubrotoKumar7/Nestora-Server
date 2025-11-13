@@ -100,6 +100,13 @@ async function run(){
             res.send(result);
         })
 
+        app.get('/reviews/:id', async(req, res)=> {
+            const id = req.params.id;
+            const query = {productId: id}
+            const cursor = reviewsCollections.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
 
         // await client.db('admin').command({ping: 1});
