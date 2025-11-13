@@ -93,6 +93,18 @@ async function run(){
             res.send(result);
         })
 
+        app.get('/properties/sort/low2high', async(req, res)=> {
+            const cursor = propertiesCollections.find().sort({price: 1});
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/properties/sort/high2low', async(req, res)=> {
+            const cursor = propertiesCollections.find().sort({price: -1});
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         // reviews related api
         app.post('/reviews', async(req, res)=> {
             const data = req.body;
