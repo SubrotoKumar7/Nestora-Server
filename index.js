@@ -93,17 +93,21 @@ async function run(){
             res.send(result);
         })
 
-        app.get('/properties/sort/low2high', async(req, res)=> {
-            const cursor = propertiesCollections.find().sort({price: 1});
-            const result = await cursor.toArray();
+        app.get('/sort', async (req, res) => {
+            const sortBy = req.query.price;
+            let sortQuery;
+            if (sortBy === 'low2high') {
+                sortQuery = { price: 1 };
+            }
+            if (sortBy === 'high2low') {
+                sortQuery = { price: -1 };
+            }
+            if(sortBy === 'none'){
+                sortQuery = {};
+            }
+            const result = await propertiesCollections.find({}).sort(sortQuery).toArray();
             res.send(result);
-        })
-
-        app.get('/properties/sort/high2low', async(req, res)=> {
-            const cursor = propertiesCollections.find().sort({price: -1});
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+        });
 
         // reviews related api
         app.post('/reviews', async(req, res)=> {
