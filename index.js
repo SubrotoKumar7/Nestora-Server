@@ -56,6 +56,21 @@ async function run(){
             res.send(result);
         })
 
+        app.patch('/users', async(req, res)=> {
+            const {email, role} = req.body;
+            const query = {email};
+            const updateRole = {
+                $set: {
+                    role: role
+                }
+            }
+
+            const result = await usersCollections.updateOne(query, updateRole);
+            res.send(result);
+        })
+
+
+
         // property related api
         app.get('/properties', async (req, res) => {
             try {
