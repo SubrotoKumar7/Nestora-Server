@@ -68,7 +68,7 @@ async function run(){
 
         app.get('/latest-properties', async(req, res)=> {
             const query = {};
-            const cursor =  propertiesCollections.find(query).sort({createdAt: -1}).limit(6);
+            const cursor =  propertiesCollections.find(query).sort({createdAt: -1}).limit(8);
             const result = await cursor.toArray();
             res.send(result)
         })
