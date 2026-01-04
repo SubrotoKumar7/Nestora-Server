@@ -37,6 +37,8 @@ async function run(){
         // user related api
         app.post('/users', async(req, res)=> {
             const user = req.body;
+            user.createdAt = new Date();
+            user.role = "user";
             const result = await usersCollections.insertOne(user);
             res.send(result);
         })
