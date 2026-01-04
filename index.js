@@ -42,16 +42,54 @@ async function run(){
         })
 
         // property related api
-        app.get('/properties', async(req, res)=> {
-            const email = req.query.email;
-            const query = {};
-            if(email){
+        app.get('/properties', async (req, res) => {
+            try {
+                const email = req.query.email;
+                const page = parseInt(req.query.page) || 1;
+                const limit = parseInt(req.query.limit) || 8;
+                const sort = req.query.sort || "none";
+
+                const query = {};
+                if (email) {
                 query.agentEmail = email;
+                }
+
+                // sorting logic
+                let sortQuery = {};
+                if (sort === "low2high") {
+                sortQuery.price = 1;
+                } else if (sort === "high2low") {
+                sortQuery.price = -1;
+                }
+
+                const skip = (page - 1) * limit;
+
+                // paginated + sorted data
+                const data = await propertiesCollections
+                .find(query)
+                .sort(sortQuery)
+                .skip(skip)
+                .limit(limit)
+                .toArray();
+
+                // total count (filtered)
+                const totalItems = await propertiesCollections.countDocuments(query);
+                const totalPages = Math.ceil(totalItems / limit);
+
+                res.send({
+                    data,
+                    totalPages,
+                    currentPage: page,
+                    totalItems,
+                });
+            } catch (error) {
+                res.status(500).send({
+                message: "Failed to fetch properties",
+                error,
+                });
             }
-            const cursor = propertiesCollections.find(query);
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+        });
+
 
         app.get('/properties/:id', async(req, res)=> {
             const id = req.params.id;
